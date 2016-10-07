@@ -60,14 +60,15 @@ public class TestLogs {
         log("message 2");
         logUserRequest("wanted help", "needed new password");
         log("sample log");
+        logTransaction("message query", "select foo from bar with parameter");
         doInSession((session) -> {
             Query<Log> query=session.createQuery("from Log l", Log.class);
-            assertEquals(query.list().size(), 5);
+            assertEquals(query.list().size(), 6);
         });
         doInSession((session) -> {
             Query<Log> query=session.createQuery("from Log l where l.message like :term", Log.class);
             query.setParameter("term", "message%");
-            assertEquals(query.list().size(), 2);
+            assertEquals(query.list().size(), 3);
         });
         doInSession((session) -> {
             Query<Log> query=session.createQuery("from Log l where type(l) = Log", Log.class);
